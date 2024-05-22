@@ -1,43 +1,56 @@
 package com.example.navalbattle.controller;
 
+import com.example.navalbattle.model.GameBoard;
+import com.example.navalbattle.model.Ship;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.paint.Color;
 
-//hello
 public class NavalBattleController {
 
     @FXML
-    private AnchorPane anchorPane;
+    private Canvas gameBoard;
 
     @FXML
-    private GridPane gameBoard;
+    private Canvas gameBoard2;
 
-    private static final int ROWS = 10;
-    private static final int COLS = 10;
-    private static final double PREF_WIDTH = 296;
-    private static final double PREF_HEIGHT = 311;
-    private TextField[][] boardCells;
+    private GameBoard playerGameBoard;
+    private GameBoard machineGameBoard;
 
     @FXML
     public void initialize() {
-        boardCells = new TextField[ROWS][COLS];
-        double cellWidth = PREF_WIDTH / COLS;
-        double cellHeight = PREF_HEIGHT / ROWS;
+        playerGameBoard = new GameBoard(gameBoard, 10, 10);
+        machineGameBoard = new GameBoard(gameBoard2, 10, 10);
 
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
-                TextField textField = new TextField();
-                textField.setPrefWidth(cellWidth);
-                textField.setPrefHeight(cellHeight);
-                textField.setEditable(false);
-                gameBoard.add(textField, col, row);
-                boardCells[row][col] = textField;
+        // Crear instancias de los barcos y desplegarlos en el tablero del jugador
+        Ship portaaviones = new Ship("Portaaviones", 4, Color.RED, false);
+        portaaviones.deployShip(gameBoard, 0, 0, gameBoard.getWidth() / 10, gameBoard.getHeight() / 10);
 
-                // Agregar evento de clic
-                textField.setOnMouseClicked(event -> textField.setStyle("-fx-control-inner-background: red;"));
-            }
-        }
+        Ship submarino1 = new Ship("Submarino", 3, Color.BLUE, true);
+        submarino1.deployShip(gameBoard, 2, 3, gameBoard.getWidth() / 10, gameBoard.getHeight() / 10);
+
+        Ship submarino2 = new Ship("Submarino", 3, Color.BLUE, false);
+        submarino2.deployShip(gameBoard, 4, 5, gameBoard.getWidth() / 10, gameBoard.getHeight() / 10);
+
+        Ship destructor1 = new Ship("Destructor", 2, Color.GREEN, true);
+        destructor1.deployShip(gameBoard, 6, 1, gameBoard.getWidth() / 10, gameBoard.getHeight() / 10);
+
+        Ship destructor2 = new Ship("Destructor", 2, Color.GREEN, false);
+        destructor2.deployShip(gameBoard, 8, 7, gameBoard.getWidth() / 10, gameBoard.getHeight() / 10);
+
+        Ship destructor3 = new Ship("Destructor", 2, Color.GREEN, true);
+        destructor3.deployShip(gameBoard, 5, 9, gameBoard.getWidth() / 10, gameBoard.getHeight() / 10);
+
+        Ship fragata1 = new Ship("Fragata", 1, Color.YELLOW, false);
+        fragata1.deployShip(gameBoard, 1, 6, gameBoard.getWidth() / 10, gameBoard.getHeight() / 10);
+
+        Ship fragata2 = new Ship("Fragata", 1, Color.YELLOW, true);
+        fragata2.deployShip(gameBoard, 3, 2, gameBoard.getWidth() / 10, gameBoard.getHeight() / 10);
+
+        Ship fragata3 = new Ship("Fragata", 1, Color.YELLOW, false);
+        fragata3.deployShip(gameBoard, 7, 8, gameBoard.getWidth() / 10, gameBoard.getHeight() / 10);
+
+        Ship fragata4 = new Ship("Fragata", 1, Color.YELLOW, true);
+        fragata4.deployShip(gameBoard, 9, 4, gameBoard.getWidth() / 10, gameBoard.getHeight() / 10);
     }
 }
