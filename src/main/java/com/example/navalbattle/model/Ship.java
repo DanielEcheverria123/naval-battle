@@ -1,99 +1,33 @@
 package com.example.navalbattle.model;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class Ship {
-    private String name;
-    private int size;
+    private Group shipGroup;
     private Color color;
-    private int row;
-    private int col;
-    private boolean vertical;
+    private int size;
 
-    public Ship(String name, int size, Color color, boolean vertical) {
-        this.name = name;
-        this.size = size;
+    public Ship(Color color, int size) {
         this.color = color;
-        this.vertical = vertical;
-    }
+        this.size = size;
+        this.shipGroup = new Group();
 
-    public void deployShip(Canvas canvas, int row, int col, double cellWidth, double cellHeight) {
-        this.row = row;
-        this.col = col;
-
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(color);
-
-        if (name.equals("Portaaviones")) {
-            if (vertical) {
-                gc.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight * 4);
-                gc.setFill(Color.GRAY);
-                gc.fillRect(col * cellWidth, row * cellHeight + (cellHeight * 1.5), cellWidth, cellHeight);
-                gc.setFill(Color.RED);
-                gc.fillRect(col * cellWidth + (cellWidth * 0.2), row * cellHeight + (cellHeight * 1.5), cellWidth * 0.6, cellHeight * 0.6);
-            } else {
-                gc.fillRect(col * cellWidth, row * cellHeight, cellWidth * 4, cellHeight);
-                gc.setFill(Color.GRAY);
-                gc.fillRect(col * cellWidth + (cellWidth * 1.5), row * cellHeight, cellWidth, cellHeight);
-                gc.setFill(Color.RED);
-                gc.fillRect(col * cellWidth + (cellWidth * 1.5), row * cellHeight + (cellHeight * 0.2), cellWidth * 0.6, cellHeight * 0.6);
-            }
-        } else if (name.equals("Submarino")) {
-            if (vertical) {
-                gc.fillOval(col * cellWidth + (cellWidth * 0.2), row * cellHeight, cellWidth * 0.6, cellHeight * 3);
-                gc.setFill(Color.DARKBLUE);
-                gc.fillOval(col * cellWidth + (cellWidth * 0.2), row * cellHeight + (cellHeight * 0.5), cellWidth * 0.6, cellHeight * 2);
-            } else {
-                gc.fillOval(col * cellWidth, row * cellHeight + (cellHeight * 0.2), cellWidth * 3, cellHeight * 0.6);
-                gc.setFill(Color.DARKBLUE);
-                gc.fillOval(col * cellWidth + (cellWidth * 0.5), row * cellHeight + (cellHeight * 0.2), cellWidth * 2, cellHeight * 0.6);
-            }
-        } else if (name.equals("Destructor")) {
-            if (vertical) {
-                gc.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight * 2);
-                gc.setFill(Color.GREEN);
-                gc.fillRect(col * cellWidth + (cellWidth * 0.2), row * cellHeight + (cellHeight * 0.2), cellWidth * 0.6, cellHeight * 1.6);
-            } else {
-                gc.fillRect(col * cellWidth, row * cellHeight, cellWidth * 2, cellHeight);
-                gc.setFill(Color.GREEN);
-                gc.fillRect(col * cellWidth + (cellWidth * 0.2), row * cellHeight + (cellHeight * 0.2), cellWidth * 1.6, cellHeight * 0.6);
-            }
-        } else if (name.equals("Fragata")) {
-            if (vertical) {
-                gc.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
-                gc.setFill(Color.YELLOW);
-                gc.fillPolygon(new double[]{col * cellWidth + (cellWidth * 0.5), col * cellWidth + (cellWidth * 0.2), col * cellWidth + (cellWidth * 0.8)},
-                        new double[]{row * cellHeight + (cellHeight * 0.2), row * cellHeight + (cellHeight * 0.8), row * cellHeight + (cellHeight * 0.8)},
-                        3);
-            } else {
-                gc.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
-                gc.setFill(Color.YELLOW);
-                gc.fillPolygon(new double[]{col * cellWidth + (cellWidth * 0.2), col * cellWidth + (cellWidth * 0.8), col * cellWidth + (cellWidth * 0.8)},
-                        new double[]{row * cellHeight + (cellHeight * 0.5), row * cellHeight + (cellHeight * 0.2), row * cellHeight + (cellHeight * 0.8)},
-                        3);
-            }
+        for (int i = 0; i < size; i++) {
+            Rectangle part = new Rectangle(34, 34);
+            part.setFill(color);
+            part.setStroke(Color.BLACK);
+            part.setX(i * 37);
+            shipGroup.getChildren().add(part);
         }
     }
 
-    public String getName() {
-        return name;
+    public Group getShipGroup() {
+        return shipGroup;
     }
 
     public int getSize() {
         return size;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public boolean isVertical() {
-        return vertical;
     }
 }
