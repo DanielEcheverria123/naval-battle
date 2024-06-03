@@ -39,6 +39,8 @@ public class PlayerBoard {
         } else if (ship.equals("Destroyer")) {
             this.board[row][column] = 3;
             this.board[row][column + 1] = 3;
+        } else if (ship.equals("Frigate")) {
+            this.board[row][column] = 4;
         }
     }
 
