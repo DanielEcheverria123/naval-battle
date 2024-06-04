@@ -14,7 +14,7 @@ public class NavalBattleController {
     @FXML
     private Button buttonHandlerPlay;
 
-    private PlayerBoard playerBoard;
+    private MachineBoard machineBoard;
 
     @FXML
     void onHandlerButtonPlay(ActionEvent event) {
@@ -30,7 +30,7 @@ public class NavalBattleController {
 
     @FXML
     public void initialize() {
-        playerBoard = new PlayerBoard();
+        machineBoard = new MachineBoard();
         // Node, Column, Row
         Random random = new Random();
         // System.out.println(random_position);
@@ -46,7 +46,7 @@ public class NavalBattleController {
         add_frigates();
         for (int row = 0; row <= 9; row++) {
             for (int column = 0; column <= 9; column++) {
-                System.out.print(playerBoard.get_player_board()[row][column]);
+                System.out.print(machineBoard.get_machine_board()[row][column]);
                 System.out.print("");
             }
             System.out.println("");
@@ -59,11 +59,11 @@ public class NavalBattleController {
     private void add_carriers() {
         // Adding Carriers to the player's board
         Carrier carrier1 = new Carrier(18 * 4, 0, 6);
-        playerBoard.set_ship(carrier1.getRow(), carrier1.getCol(), "Carrier");
+        machineBoard.set_ship(carrier1.getRow(), carrier1.getCol(), "Carrier");
         // if (condition) {
 
         // }
-        gameBoardPlayer.add(carrier1.getShipGroup(), carrier1.getCol(), carrier1.getRow());
+        gameBoardMachine.add(carrier1.getShipGroup(), carrier1.getCol(), carrier1.getRow());
     }
 
     private void add_submarines() {
@@ -82,7 +82,7 @@ public class NavalBattleController {
             verifySub(submarine1);
         }
         // verifySub(submarine1);
-        gameBoardPlayer.add(submarine1.getShipGroup(), submarine1.getCol(), submarine1.getRow());
+        gameBoardMachine.add(submarine1.getShipGroup(), submarine1.getCol(), submarine1.getRow());
 
         Submarine submarine2 = new Submarine(18 * 3, 0, 8);
         try {
@@ -99,7 +99,7 @@ public class NavalBattleController {
         }
         // verifySub(submarine2);
         System.out.println(submarine2.getRow() + " " + submarine2.getCol());
-        gameBoardPlayer.add(submarine2.getShipGroup(), submarine2.getCol(), submarine2.getRow());
+        gameBoardMachine.add(submarine2.getShipGroup(), submarine2.getCol(), submarine2.getRow());
     }
 
     private void add_destroyers() {
@@ -118,7 +118,7 @@ public class NavalBattleController {
             verifyDes(destroyer1);
         }
 
-        gameBoardPlayer.add(destroyer1.getShipGroup(), destroyer1.getCol(), destroyer1.getRow());
+        gameBoardMachine.add(destroyer1.getShipGroup(), destroyer1.getCol(), destroyer1.getRow());
 
         Destroyer destroyer2 = new Destroyer(18 * 2, get_random_pos(), get_random_pos());
         try {
@@ -133,7 +133,7 @@ public class NavalBattleController {
 
             verifyDes(destroyer2);
         }
-        gameBoardPlayer.add(destroyer2.getShipGroup(), destroyer2.getCol(), destroyer2.getRow());
+        gameBoardMachine.add(destroyer2.getShipGroup(), destroyer2.getCol(), destroyer2.getRow());
 
         Destroyer destroyer3 = new Destroyer(18 * 2, get_random_pos(), get_random_pos());
         try {
@@ -148,7 +148,7 @@ public class NavalBattleController {
 
             verifyDes(destroyer3);
         }
-        gameBoardPlayer.add(destroyer3.getShipGroup(), destroyer3.getCol(), destroyer3.getRow());
+        gameBoardMachine.add(destroyer3.getShipGroup(), destroyer3.getCol(), destroyer3.getRow());
     }
 
     private void add_frigates() {
@@ -166,7 +166,7 @@ public class NavalBattleController {
 
             verifyFri(frigate1);
         }
-        gameBoardPlayer.add(frigate1.getShipGroup(), frigate1.getCol(), frigate1.getRow());
+        gameBoardMachine.add(frigate1.getShipGroup(), frigate1.getCol(), frigate1.getRow());
 
         Frigate frigate2 = new Frigate(18 * 1, get_random_pos(), get_random_pos());
         try {
@@ -181,7 +181,7 @@ public class NavalBattleController {
 
             verifyFri(frigate2);
         }
-        gameBoardPlayer.add(frigate2.getShipGroup(), frigate2.getCol(), frigate2.getRow());
+        gameBoardMachine.add(frigate2.getShipGroup(), frigate2.getCol(), frigate2.getRow());
 
         Frigate frigate3 = new Frigate(18 * 1, get_random_pos(), get_random_pos());
         try {
@@ -196,7 +196,7 @@ public class NavalBattleController {
 
             verifyFri(frigate3);
         }
-        gameBoardPlayer.add(frigate3.getShipGroup(), frigate3.getCol(), frigate3.getRow());
+        gameBoardMachine.add(frigate3.getShipGroup(), frigate3.getCol(), frigate3.getRow());
 
         Frigate frigate4 = new Frigate(18 * 1, get_random_pos(), get_random_pos());
         try {
@@ -211,11 +211,11 @@ public class NavalBattleController {
 
             verifyFri(frigate4);
         }
-        gameBoardPlayer.add(frigate4.getShipGroup(), frigate4.getCol(), frigate4.getRow());
+        gameBoardMachine.add(frigate4.getShipGroup(), frigate4.getCol(), frigate4.getRow());
     }
 
     private boolean is_empty(int row, int column) {
-        if (playerBoard.get_player_board()[row][column] == 0) {
+        if (machineBoard.get_machine_board()[row][column] == 0) {
             return true;
         } else {
             return false;
@@ -226,7 +226,7 @@ public class NavalBattleController {
         if (is_empty(sub.getRow(), sub.getCol()) && is_empty(sub.getRow(), sub.getCol() + 1)
                 && is_empty(sub.getRow(), sub.getCol() + 2)) {
             System.out.println("Empty");
-            playerBoard.set_ship(sub.getRow(), sub.getCol(), "Submarine");
+            machineBoard.set_ship(sub.getRow(), sub.getCol(), "Submarine");
         } else {
             System.out.println("Not Empty");
             while ((is_empty(sub.getRow(), sub.getCol())
@@ -234,34 +234,34 @@ public class NavalBattleController {
                     && is_empty(sub.getRow(), sub.getCol() + 2)) == false) {
                 sub.setRow(get_random_pos());
             }
-            playerBoard.set_ship(sub.getRow(), sub.getCol(), "Submarine");
+            machineBoard.set_ship(sub.getRow(), sub.getCol(), "Submarine");
         }
     }
 
     private void verifyDes(Destroyer des) {
         if (is_empty(des.getRow(), des.getCol()) && is_empty(des.getRow(), des.getCol() + 1)) {
             System.out.println("Empty");
-            playerBoard.set_ship(des.getRow(), des.getCol(), "Destroyer");
+            machineBoard.set_ship(des.getRow(), des.getCol(), "Destroyer");
         } else {
             System.out.println("Not Empty");
             while ((is_empty(des.getRow(), des.getCol())
                     && is_empty(des.getRow(), des.getCol() + 1)) == false) {
                 des.setRow(get_random_pos());
             }
-            playerBoard.set_ship(des.getRow(), des.getCol(), "Destroyer");
+            machineBoard.set_ship(des.getRow(), des.getCol(), "Destroyer");
         }
     }
 
     private void verifyFri(Frigate fri) {
         if (is_empty(fri.getRow(), fri.getCol())) {
             System.out.println("Empty");
-            playerBoard.set_ship(fri.getRow(), fri.getCol(), "Frigate");
+            machineBoard.set_ship(fri.getRow(), fri.getCol(), "Frigate");
         } else {
             System.out.println("Not Empty");
             while (is_empty(fri.getRow(), fri.getCol()) == false) {
                 fri.setRow(get_random_pos());
             }
-            playerBoard.set_ship(fri.getRow(), fri.getCol(), "Frigate");
+            machineBoard.set_ship(fri.getRow(), fri.getCol(), "Frigate");
         }
     }
 
