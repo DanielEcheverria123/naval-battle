@@ -1,10 +1,10 @@
 package com.example.navalbattle.model;
 
-public class MachineBoard {
+public class PlayerBoard {
 
     private int[][] board;
 
-    public MachineBoard() {
+    public PlayerBoard() {
         // Constructor
         this.board = new int[][] {
                 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -21,14 +21,8 @@ public class MachineBoard {
         };
     }
 
-    public int[][] getMachineBoard() {
+    public int[][] getPlayerBoard() {
         return board;
-    }
-
-    public int getSpecificMachineBoardCell(int row, int column) {
-        // System.out.println("Machine Board Cell [" + row + "][" + column + "] = " +
-        // this.board[row][column]);
-        return this.board[row][column];
     }
 
     public void setShip(int row, int column, String ship) {
