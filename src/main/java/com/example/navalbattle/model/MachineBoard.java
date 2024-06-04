@@ -1,10 +1,10 @@
 package com.example.navalbattle.model;
 
-public class PlayerBoard {
+public class MachineBoard {
 
     private int[][] board;
 
-    public PlayerBoard() {
+    public MachineBoard() {
         // Constructor
         this.board = new int[][] {
                 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -21,7 +21,7 @@ public class PlayerBoard {
         };
     }
 
-    public int[][] get_player_board() {
+    public int[][] get_machine_board() {
         return board;
     }
 
