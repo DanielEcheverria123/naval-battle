@@ -3,6 +3,7 @@ package com.example.navalbattle.view;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,6 +25,9 @@ public class NavalBattleStage extends Stage {
 
         // Configuring the stage
         setTitle("Batalla naval"); // Sets the title of the stage
+        getIcons().add(
+                new Image(
+                        String.valueOf(getClass().getResource("/com/example/navalbattle/images/favicon.png"))));
         setScene(scene); // Sets the scene for the stage
         setResizable(false); // Disallows resizing of the stage
         show(); // Displays the stage

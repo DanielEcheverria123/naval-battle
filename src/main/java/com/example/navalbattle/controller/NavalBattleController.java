@@ -1,15 +1,26 @@
 package com.example.navalbattle.controller;
 
 import com.example.navalbattle.model.*;
-
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
 
 import java.util.Random;
 
 public class NavalBattleController {
 
+
+    @FXML
+    private Button buttonHandlerPlay;
+
     private PlayerBoard playerBoard;
+
+    @FXML
+    void onHandlerButtonPlay(ActionEvent event) {
+
+    }
+
 
     @FXML
     private GridPane gameBoardMachine;
