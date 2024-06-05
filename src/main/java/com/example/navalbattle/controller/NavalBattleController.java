@@ -297,22 +297,49 @@ public class NavalBattleController {
     }
 
     private void drawHitFlame(int col, int row, String gridX, String gridY) {
-        // (String.valueOf(point.getX())),
-        // String.valueOf(point.getY())
-        QuadCurve curve = new QuadCurve();
-        // int newGridX = (int) gridX;
-        // Adding properties to the Quad Curve
-        // System.out.println("X: " + gridX + " Y: " + gridY);
-        // System.out.println(37 * row + " " + 35 * col);
+        // Coordenadas de la celda
+        double startX = col * 35 + 17.5; // Coordenada X del centro de la celda
+        double startY = row * 35 + 17.5; // Coordenada Y del centro de la celda
 
-        curve.setStartX(0);
-        curve.setStartY(90);
-        curve.setEndX(35);
-        curve.setEndY(90);
-        curve.setControlX(18);
-        curve.setControlY(36f);
-        curve.setFill(javafx.scene.paint.Color.RED);
-        gameBoardMachine.add(curve, col, row);
+        // Tamaño de la estrella
+        double size = 20;
+
+        // Agregando curvas para formar la estrella
+        for (int i = 0; i < 5; i++) {
+            double angle1 = Math.toRadians(72 * i - 18);
+            double angle2 = Math.toRadians(72 * i + 18);
+
+            // Puntos de control
+            double controlX1 = startX + Math.cos(angle1) * size;
+            double controlY1 = startY + Math.sin(angle1) * size;
+            double controlX2 = startX + Math.cos(angle2) * size;
+            double controlY2 = startY + Math.sin(angle2) * size;
+
+            // Punto final
+            double endX = startX + Math.cos(Math.toRadians(72 * i)) * size * 2;
+            double endY = startY + Math.sin(Math.toRadians(72 * i)) * size * 2;
+
+            // Agregar la curva a la escena
+            QuadCurve curve = new QuadCurve();
+            curve.setStartX(startX);
+            curve.setStartY(startY);
+            curve.setEndX(endX);
+            curve.setEndY(endY);
+            curve.setControlX(controlX1);
+            curve.setControlY(controlY1);
+            curve.setFill(javafx.scene.paint.Color.RED);
+            gameBoardMachine.add(curve, col, row);
+
+            QuadCurve curve2 = new QuadCurve();
+            curve2.setStartX(startX);
+            curve2.setStartY(startY);
+            curve2.setEndX(endX);
+            curve2.setEndY(endY);
+            curve2.setControlX(controlX2);
+            curve2.setControlY(controlY2);
+            curve2.setFill(javafx.scene.paint.Color.RED);
+            gameBoardMachine.add(curve2, col, row);
+        }
     }
 
     // Mouse controllers
