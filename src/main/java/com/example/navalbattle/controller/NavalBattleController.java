@@ -1,6 +1,8 @@
 package com.example.navalbattle.controller;
 
 import com.example.navalbattle.model.*;
+
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -16,6 +18,8 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.PickResult;
 import javafx.scene.input.TransferMode;
+import javafx.util.Duration;
+import javafx.animation.PauseTransition;
 
 import java.util.Random;
 
@@ -62,10 +66,6 @@ public class NavalBattleController {
     public void initialize() {
         machineBoard = new MachineBoard();
         playerBoard = new PlayerBoard();
-
-        // Node, Column, Row
-        Random random = new Random();
-        // System.out.println(random_position);
         turn = 9;
         leftPLayerShip = 10;
         leftMachineShip = 10;
@@ -75,35 +75,7 @@ public class NavalBattleController {
         add_destroyers();
         add_frigates();
         addDeckShips();
-        // try {
-        // } catch (Exception e) {
-        // // TODO: handle exception
-        // System.out.println(e);
-        // }
 
-        // Machine Board
-        // for (int row = 0; row <= 9; row++) {
-        // for (int column = 0; column <= 9; column++) {
-        // System.out.print(machineBoard.getMachineBoard()[row][column]);
-        // System.out.print("");
-        // }
-        // System.out.println("");
-        // }for (int row = 0; row <= 9; row++) {
-        // for (int column = 0; column <= 9; column++) {
-        // System.out.print(machineBoard.getMachineBoard()[row][column]);
-        // System.out.print("");
-        // }
-        // System.out.println("");
-        // }
-
-        // Player Board
-        // for (int row = 0; row <= 9; row++) {
-        // for (int column = 0; column <= 9; column++) {
-        // System.out.print(playerBoard.getPlayerBoard()[row][column]);
-        // System.out.print("");
-        // }
-        // System.out.println("");
-        // }
     }
 
     private void addLeftQuantity() {
@@ -403,7 +375,7 @@ public class NavalBattleController {
     }
 
     // Water and Ship Hit drawers
-    private void drawWaterHit(int col, int row) {
+    private void drawWaterHit(int col, int row, GridPane gameBoard) {
         Ellipse waterHit = new Ellipse(18, 17);
         Ellipse innerWaterHit = new Ellipse(15, 14);
         Ellipse subInnerWaterHit = new Ellipse(12, 11);
@@ -414,14 +386,14 @@ public class NavalBattleController {
         subInnerWaterHit.setFill(javafx.scene.paint.Color.AQUA);
         smallWaterHit.setFill(javafx.scene.paint.Color.DARKBLUE);
 
-        gameBoardMachine.add(waterHit, col, row);
-        gameBoardMachine.add(innerWaterHit, col, row);
-        gameBoardMachine.add(subInnerWaterHit, col, row);
-        gameBoardMachine.add(smallWaterHit, col, row);
+        gameBoard.add(waterHit, col, row);
+        gameBoard.add(innerWaterHit, col, row);
+        gameBoard.add(subInnerWaterHit, col, row);
+        gameBoard.add(smallWaterHit, col, row);
 
     }
 
-    private void drawHitFlame(int col, int row, String gridX, String gridY) {
+    private void drawHitFlame(int col, int row, GridPane gameBoard) {
         // Coordenadas de la celda
         double startX = col * 35 + 17.5; // Coordenada X del centro de la celda
         double startY = row * 35 + 17.5; // Coordenada Y del centro de la celda
@@ -453,7 +425,7 @@ public class NavalBattleController {
             curve.setControlX(controlX1);
             curve.setControlY(controlY1);
             curve.setFill(javafx.scene.paint.Color.RED);
-            gameBoardMachine.add(curve, col, row);
+            gameBoard.add(curve, col, row);
 
             QuadCurve curve2 = new QuadCurve();
             curve2.setStartX(startX);
@@ -463,7 +435,356 @@ public class NavalBattleController {
             curve2.setControlX(controlX2);
             curve2.setControlY(controlY2);
             curve2.setFill(javafx.scene.paint.Color.RED);
-            gameBoardMachine.add(curve2, col, row);
+            gameBoard.add(curve2, col, row);
+        }
+
+    }
+
+    private void drawSunkShip(int col, int row, GridPane gameBoard) {
+        Ellipse waterHit = new Ellipse(18, 17);
+        Ellipse innerWaterHit = new Ellipse(15, 14);
+        Ellipse subInnerWaterHit = new Ellipse(12, 11);
+        Ellipse smallWaterHit = new Ellipse(8, 7);
+
+        waterHit.setFill(javafx.scene.paint.Color.RED);
+        innerWaterHit.setFill(javafx.scene.paint.Color.RED);
+        subInnerWaterHit.setFill(javafx.scene.paint.Color.RED);
+        smallWaterHit.setFill(javafx.scene.paint.Color.RED);
+
+        gameBoard.add(waterHit, col, row);
+        gameBoard.add(innerWaterHit, col, row);
+        gameBoard.add(subInnerWaterHit, col, row);
+        gameBoard.add(smallWaterHit, col, row);
+
+    }
+
+    // private void verifySunk(int row, int col, GridPane boardGame, String ship) {
+    // System.out.println("Verificando si el barco ha sido hundido:");
+    // System.out.println(row + " " + col);
+    // System.out.println(machineBoard.getSpecificMachineBoardCell(row, col));
+    // if (ship.equals("Carrier")) {
+    // if (col > 8) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 2) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 3) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col - 2, row, boardGame);
+    // drawSunkShip(col - 3, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // }
+    // }
+    // } else if (col == 8) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 2) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col + 1, row, boardGame);
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col - 2, row, boardGame);
+
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // }
+    // } else if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 2) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 3) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col - 2, row, boardGame);
+    // drawSunkShip(col - 3, row, boardGame);
+
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // }
+    // }
+    // } else if (col == 7) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 2) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col + 1, row, boardGame);
+    // drawSunkShip(col + 2, row, boardGame);
+    // drawSunkShip(col - 1, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // }
+    // } else if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 2) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 3) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col - 2, row, boardGame);
+    // drawSunkShip(col - 3, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // }
+    // }
+    // } else if (col == 6) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 2) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 3) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col + 1, row, boardGame);
+    // drawSunkShip(col + 2, row, boardGame);
+    // drawSunkShip(col + 3, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // } else if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col + 1, row, boardGame);
+    // drawSunkShip(col + 2, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+
+    // }
+    // } else if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 2) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col + 1, row, boardGame);
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col - 2, row, boardGame);
+
+    // // drawSunkShip(col, row, boardGame);
+
+    // }
+    // }
+    // } else if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 2) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 3) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col - 2, row, boardGame);
+    // drawSunkShip(col - 3, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // }
+    // }
+    // } else if (col == 5 || col == 4 || col == 3) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 2) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 3) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col + 1, row, boardGame);
+    // drawSunkShip(col + 2, row, boardGame);
+    // drawSunkShip(col + 3, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // } else if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col + 1, row, boardGame);
+    // drawSunkShip(col + 2, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // } else if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 2) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col - 2, row, boardGame);
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col + 1, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // } else if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 2) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 3) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col - 3, row, boardGame);
+    // drawSunkShip(col - 2, row, boardGame);
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // }
+    // }
+    // } else if (col == 2) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 2) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 1) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col - 2, row, boardGame);
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col + 1, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // } else if ((machineBoard.getSpecificMachineBoardCell(row, col + 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 2) == 6)) {
+    // System.out.println("Portaaviones Hundidossss");
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col + 1, row, boardGame);
+    // drawSunkShip(col + 2, row, boardGame);
+
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // }
+    // } else if ((machineBoard.getSpecificMachineBoardCell(row, col + 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 2) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 3) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col + 1, row, boardGame);
+    // drawSunkShip(col + 2, row, boardGame);
+    // drawSunkShip(col + 3, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // }
+    // // drawSunkShip(col, row, boardGame);
+
+    // }
+    // }
+    // } else if (col == 1) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col - 1) == 6)) {
+    // System.out.println("Entro 1");
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 1) == 6)) {
+    // System.out.println("entro 2");
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 2) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col - 1, row, boardGame);
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col + 1, row, boardGame);
+    // drawSunkShip(col + 2, row, boardGame);
+    // //
+    // }
+    // }
+    // } else if ((machineBoard.getSpecificMachineBoardCell(row, col + 1) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 2) == 6)) {
+    // if ((machineBoard.getSpecificMachineBoardCell(row, col + 3) == 6)) {
+    // System.out.println("Portaaviones Hundido");
+    // drawSunkShip(col, row, boardGame);
+    // drawSunkShip(col + 1, row, boardGame);
+    // drawSunkShip(col + 2, row, boardGame);
+    // drawSunkShip(col + 3, row, boardGame);
+    // // drawSunkShip(col, row, boardGame);
+    // }
+
+    // }
+    // }
+    // }
+    // }
+    // }
+
+    // Código acortado
+    private boolean isShipSunk(int row, int col, int[] colOffsets, MachineBoard machineBoard, String ship) {
+        if (ship.equals("Carrier")) {
+            for (int offset : colOffsets) {
+                if (machineBoard.getSpecificMachineBoardCell(row, col + offset) != 6) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (ship.equals("Submarine")) {
+            for (int offset : colOffsets) {
+                if (machineBoard.getSpecificMachineBoardCell(row, col + offset) != 7) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (ship.equals("Destroyer")) {
+            for (int offset : colOffsets) {
+                if (machineBoard.getSpecificMachineBoardCell(row, col + offset) != 8) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (ship.equals("Frigate")) {
+            return true;
+
+        }
+        for (int offset : colOffsets) {
+            if (machineBoard.getSpecificMachineBoardCell(row, col + offset) != 6) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void verifySunk(int row, int col, GridPane boardGame, String ship) {
+        System.out.println("Verificando si el barco ha sido hundido:");
+        System.out.println(row + " " + col);
+        System.out.println(machineBoard.getSpecificMachineBoardCell(row, col));
+        if (ship.equals("Carrier")) {
+            int[][] colOffsetsList = {
+                    { -1, -2, -3 }, // Hacia la izquierda
+                    { 1, -1, -2 }, // Un espacio a la derecha y dos a la izquierda
+                    { 1, 2, -1 }, // Dos espacios a la derecha y uno a la izquierda
+                    { 1, 2, 3 } // Tres espacios a la derecha
+            };
+
+            for (int[] colOffsets : colOffsetsList) {
+                if (isShipSunk(row, col, colOffsets, machineBoard, ship)) {
+                    System.out.println("Portaaviones Hundido");
+                    drawSunkShip(col, row, boardGame);
+                    for (int offset : colOffsets) {
+                        drawSunkShip(col + offset, row, boardGame);
+                    }
+                    return; // Salimos del método ya que el barco ha sido hundido
+                }
+            }
+        } else if (ship.equals("Submarine")) {
+            int[][] colOffsetsList = {
+                    { -1, -2 }, // Hacia la izquierda
+                    { 1, -1 }, // Un espacio a la derecha y dos a la izquierda
+                    { 1, 2 }, // Hacia la derecha
+            };
+
+            for (int[] colOffsets : colOffsetsList) {
+                if (isShipSunk(row, col, colOffsets, machineBoard, ship)) {
+                    System.out.println("Submarino Hundido");
+                    drawSunkShip(col, row, boardGame);
+                    for (int offset : colOffsets) {
+                        drawSunkShip(col + offset, row, boardGame);
+                    }
+                    return; // Salimos del método ya que el barco ha sido hundido
+                }
+            }
+        } else if (ship.equals("Destroyer")) {
+            int[][] colOffsetsList = {
+                    { -1 }, // Hacia la izquierda
+                    { 1 }, // Hacia la derecha
+            };
+
+            for (int[] colOffsets : colOffsetsList) {
+                if (isShipSunk(row, col, colOffsets, machineBoard, ship)) {
+                    System.out.println("Portaaviones Hundido");
+                    drawSunkShip(col, row, boardGame);
+                    for (int offset : colOffsets) {
+                        drawSunkShip(col + offset, row, boardGame);
+                    }
+                    return; // Salimos del método ya que el barco ha sido hundido
+                }
+            }
+        } else if (ship.equals("Frigate")) {
+            // int[][] colOffsetsList = {
+            // // { -1, -2, -3 }, // Hacia la izquierda
+            // // { 1, -1, -2 }, // Un espacio a la derecha y dos a la izquierda
+            // // { 1, 2, -1 }, // Dos espacios a la derecha y uno a la izquierda
+            // // { 1, 2, 3 } // Tres espacios a la derecha
+            // };
+            drawSunkShip(col, row, boardGame);
+
+            // for (int[] colOffsets : colOffsetsList) {
+            // if (isShipSunk(row, col, colOffsets, machineBoard)) {
+            // System.out.println("Portaaviones Hundido");
+            // for (int offset : colOffsets) {
+            // drawSunkShip(col + offset, row, boardGame);
+            // }
+            // return; // Salimos del método ya que el barco ha sido hundido
+            // }
+            // }
         }
     }
 
@@ -473,15 +794,15 @@ public class NavalBattleController {
     void onMouseClickedDeck(MouseEvent event) {
         // System.out.println(event.getTarget());
         // Node spot = ;
-        System.out.println(event);
-        System.out.println(event.getX());
+        // System.out.println(event);
+        // System.out.println(event.getX());
         // System.out.println(GridPane.getRowIndex(spot));
         // Node selectedDeckShip = getNodeByRowColumnIndex(0, 2, gridDeck);
         // Node spot = event.getPickResult().getIntersectedNode();
         // System.out.println(spot);
         int verticalDeckCellSize = 38;
-        Point3D point;
-        point = (Point3D) event.getPickResult().getIntersectedPoint();
+        // Point3D point;
+        // point = (Point3D) event.getPickResult().getIntersectedPoint();
         // System.out.println("X: " + point.getX() + " Y: " + point.getY());
         int coordinateX = (int) event.getX();
         int coordinateY = (int) event.getY();
@@ -513,13 +834,7 @@ public class NavalBattleController {
          * 
          */
 
-        // GridPane grid;/*
-        // grid = (GridPane) spot;
-        // System.out.println(grid);
-        // System.out.println(gridDeck.getColumnConstraints().get(2)); */
     }
-
-    // Get Node by Row and Column
 
     @FXML
     void onMouseDraggedDeck(MouseEvent event) {
@@ -612,7 +927,7 @@ public class NavalBattleController {
         }
         for (int row = 0; row <= 9; row++) {
             for (int column = 0; column <= 9; column++) {
-                System.out.print(playerBoard.getPlayerBoard()[row][column]);
+                System.out.print(machineBoard.getMachineBoard()[row][column]);
                 System.out.print("");
             }
             System.out.println("");
@@ -653,111 +968,103 @@ public class NavalBattleController {
 
     @FXML
     void onMouseClickedMachineAttack(MouseEvent event) {
-        if (turn != 0 || turn != 1) {
+        if (turn == 9) {
             System.out.println("Preparación del juego");
-        } else {
+            System.out.println("Turno: " + turn);
+        } else if (turn == 0 || turn == 1) {
             if (turn == 1) {
-                Node spot = event.getPickResult().getIntersectedNode();
+                // Node spot = event.getPickResult().getIntersectedNode();
                 // System.out.println("NODE: " + spot);
-                GridPane grid;
-                Ellipse cell;
-                Point3D point;
-                if (spot.getClass() == GridPane.class) {
-                    System.out.println("GridPane");
-                    System.out.println(event.getPickResult());
-                    grid = (GridPane) spot;
-                    point = (Point3D) event.getPickResult().getIntersectedPoint();
-                    System.out.println("X: " + point.getX() + " Y: " + point.getY());
-                    int coordinateX = (int) point.getX() / 37;
-                    int coordinateY = (int) point.getY() / 35;
-                    System.out.println("X: " + coordinateX + " Y: " + coordinateY);
-                    // Verificamos si tocó agua o no
-                    int machineCell = machineBoard.getSpecificMachineBoardCell(coordinateY, coordinateX);
-                    if (machineCell == 0) {
-                        System.out.println("Water");
-                        drawWaterHit(coordinateX, coordinateY);
-                    } else {
-                        System.out.println("Ship");
-                        switch (machineCell) {
-                            case 1:
-                                System.out.println("Carrier");
-                                drawHitFlame(coordinateX, coordinateY, String.valueOf(point.getX()),
-                                        String.valueOf(point.getY()));
-                                break;
-                            case 2:
-                                System.out.println("Submarine");
-                                drawHitFlame(coordinateX, coordinateY, String.valueOf(point.getX()),
-                                        String.valueOf(point.getY()));
-                                break;
-                            case 3:
-                                System.out.println("Destroyer");
-                                drawHitFlame(coordinateX, coordinateY, String.valueOf(point.getX()),
-                                        String.valueOf(point.getY()));
-                                break;
-                            case 4:
-                                System.out.println("Frigate");
-                                drawHitFlame(coordinateX, coordinateY, String.valueOf(point.getX()),
-                                        String.valueOf(point.getY()));
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    // System.out.println(machineBoard.getSpecificMachineBoardCell(coordinateY,
-                    // coordinateX));
+                int coordinateX = (int) event.getX() / 37;
+                int coordinateY = (int) event.getY() / 35;
+                // GridPane grid;
+                // Ellipse cell;
+                // Point3D point;
+                int machineCell = machineBoard.getSpecificMachineBoardCell(coordinateY, coordinateX);
 
-                } else if (spot.getClass() == Ellipse.class) {
-                    System.out.println("Ellipse Event");
-                    // System.out.println(event.getX() / 38 + " " + event.getY() / 36);
-                    cell = (Ellipse) spot;
-                    // System.out.println(cell.getRadiusX());
-                    point = (Point3D) event.getPickResult().getIntersectedPoint();
-                    System.out.println(point);
-                    int coordinateX = (int) event.getX() / 37;
-                    int coordinateY = (int) event.getY() / 35;
-                    // System.out.println("X: " + coordinateX + " Y: " + coordinateY);
-                    if (spot.getClass() == Ellipse.class) {
-                        String selectedCell = String.valueOf(cell.getRadiusX());
-                        switch (selectedCell) {
-                            case "72.0":
-                                System.out.println("Carrier");
-                                drawHitFlame(coordinateX, coordinateY, String.valueOf(event.getX()),
-                                        String.valueOf(event.getY()));
-                                break;
-                            case "54.0":
-                                System.out.println("Submarine");
-                                drawHitFlame(coordinateX, coordinateY, String.valueOf(point.getX()),
-                                        String.valueOf(point.getY()));
-                                break;
-                            case "36.0":
-                                System.out.println("Destroyer");
-                                drawHitFlame(coordinateX, coordinateY, String.valueOf(point.getX()),
-                                        String.valueOf(point.getY()));
-                                break;
-                            case "18.0":
-                                System.out.println("Frigate");
-                                drawHitFlame(coordinateX, coordinateY, String.valueOf(point.getX()),
-                                        String.valueOf(point.getY()));
-                                break;
-                            default:
-                                break;
-                        }
+                if (machineCell == 0) {
+                    System.out.println("Water");
+                    machineBoard.setSpecificMachineBoardCell(coordinateY, coordinateX, "WaterMiss");
+                    drawWaterHit(coordinateX, coordinateY, gameBoardMachine);
 
-                        // System.out.println("CLASE AGARRADO: " + spot.getClass());
+                } else {
+                    System.out.println("Ship");
+                    switch (machineCell) {
+                        case 1:
+                            System.out.println("Carrier");
+                            machineBoard.setSpecificMachineBoardCell(coordinateY, coordinateX, "CarrierHit");
+                            drawHitFlame(coordinateX, coordinateY, gameBoardMachine);
+                            verifySunk(coordinateY, coordinateX, gameBoardMachine, "Carrier");
+                            break;
+                        case 2:
+                            System.out.println("Submarine");
+                            machineBoard.setSpecificMachineBoardCell(coordinateY, coordinateX, "SubmarineHit");
+                            drawHitFlame(coordinateX, coordinateY, gameBoardMachine);
+                            verifySunk(coordinateY, coordinateX, gameBoardMachine, "Submarine");
+                            break;
+                        case 3:
+                            System.out.println("Destroyer");
+                            machineBoard.setSpecificMachineBoardCell(coordinateY, coordinateX, "DestroyerHit");
+                            drawHitFlame(coordinateX, coordinateY, gameBoardMachine);
+                            verifySunk(coordinateY, coordinateX, gameBoardMachine, "Destroyer");
+                            break;
+                        case 4:
+                            System.out.println("Frigate");
+                            machineBoard.setSpecificMachineBoardCell(coordinateY, coordinateX, "FrigateHit");
+                            drawHitFlame(coordinateX, coordinateY, gameBoardMachine);
+                            verifySunk(coordinateY, coordinateX, gameBoardMachine, "Frigate");
+                            break;
+                        default:
+                            break;
                     }
+
                 }
-                // System.out.println(cell.getRadiusX());
-                // System.out.println("Machine Attack" + spot);
+
                 turn = 0;
+                // Crear una pausa de 5 segundos
+                // PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                // pause.setOnFinished(delay -> machineTurnsAttack());
+                // pause.play();
+                machineTurnsAttack();
             } else {
-                System.out.println("Machine's turn");
-                // System.out.println("It's not your turn");
-                // System.out.println("Turn: " + turn);
-                turn = 1;
+                System.out.println("Waiting for the machine to attack");
             }
         }
 
         // System.out.println(turn);
+    }
+
+    private void machineTurnsAttack() {
+
+        System.out.println("Machine's turn");
+        int attackOnCoordinateX = get_random_pos();
+        int attackOnCoordinateY = get_random_pos();
+        int playerCell = playerBoard.getSpecificPlayerBoardCell(attackOnCoordinateY, attackOnCoordinateX);
+        if (playerCell == 1 || playerCell == 2 || playerCell == 3 || playerCell == 4) {
+            System.out.println("HIT!!");
+            if (playerCell == 1) {
+                playerBoard.setSpecificPlayerBoardCell(attackOnCoordinateY, attackOnCoordinateX, "CarrierHit");
+                verifySunk(attackOnCoordinateY, attackOnCoordinateX, gameBoardMachine, "Carrier");
+                drawHitFlame(attackOnCoordinateX, attackOnCoordinateY, gameBoardPlayer);
+            } else if (playerCell == 2) {
+                playerBoard.setSpecificPlayerBoardCell(attackOnCoordinateY, attackOnCoordinateX, "SubmarineHit");
+                drawHitFlame(attackOnCoordinateX, attackOnCoordinateY, gameBoardPlayer);
+                verifySunk(attackOnCoordinateY, attackOnCoordinateX, gameBoardMachine, "Submarine");
+            } else if (playerCell == 3) {
+                playerBoard.setSpecificPlayerBoardCell(attackOnCoordinateY, attackOnCoordinateX, "DestroyerHit");
+                drawHitFlame(attackOnCoordinateX, attackOnCoordinateY, gameBoardPlayer);
+                verifySunk(attackOnCoordinateY, attackOnCoordinateX, gameBoardMachine, "Destroyer");
+            } else if (playerCell == 4) {
+                playerBoard.setSpecificPlayerBoardCell(attackOnCoordinateY, attackOnCoordinateX, "FrigateHit");
+                drawHitFlame(attackOnCoordinateX, attackOnCoordinateY, gameBoardPlayer);
+                verifySunk(attackOnCoordinateY, attackOnCoordinateX, gameBoardMachine, "Frigate");
+            }
+        } else {
+            System.out.println("Water");
+            playerBoard.setSpecificPlayerBoardCell(attackOnCoordinateY, attackOnCoordinateX, "WaterMiss");
+            drawWaterHit(attackOnCoordinateX, attackOnCoordinateY, gameBoardPlayer);
+        }
+        turn = 1;
     }
 
     @FXML
@@ -778,6 +1085,17 @@ public class NavalBattleController {
     // Player Grid
     @FXML
     void onHandlerButtonPlay(ActionEvent event) {
+        // if (labelCarrierQuantityLeft.getText().equals("0") &&
+        // labelSubmarineQuantityLeft.getText().equals("0")
+        // && labelDestroyerQuantityLeft.getText().equals("0") &&
+        // labelFrigateQuantityLeft.getText().equals("0")) {
+        // System.out.println("Juego Iniciado");
+        // turn = 1;
+        // } else {
+        // System.out.println("No se han colocado todas las naves");
+
+        // }
+        turn = 1;
 
     }
 

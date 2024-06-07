@@ -6,6 +6,12 @@ public class MachineBoard {
 
     public MachineBoard() {
         // Constructor
+        /**
+         * State controller for the board:
+         * 0 = Empty 1 = Carrier 2 = Submarine 3 = Destroyer 4 = Frigate
+         * 5 = WaterMiss 6 = CarrierHit 7 = SubmarineHit 8 = DestroyerHit 9 = FrigateHit
+         * 10 = CarrierSunk 11 = SubmarineSunk 12 = DestroyerSunk 13 = FrigateSunk
+         */
         this.board = new int[][] {
                 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -29,6 +35,29 @@ public class MachineBoard {
         // System.out.println("Machine Board Cell [" + row + "][" + column + "] = " +
         // this.board[row][column]);
         return this.board[row][column];
+    }
+
+    public void setSpecificMachineBoardCell(int row, int column, String value) {
+        int cell = this.board[row][column];
+        if (value.equals("WaterMiss")) {
+            this.board[row][column] = 5;
+        } else if (value.equals("CarrierHit")) {
+            this.board[row][column] = 6;
+        } else if (value.equals("SubmarineHit")) {
+            this.board[row][column] = 7;
+        } else if (value.equals("DestroyerHit")) {
+            this.board[row][column] = 8;
+        } else if (value.equals("FrigateHit")) {
+            this.board[row][column] = 9;
+        } else if (value.equals("CarrierSunk")) {
+            this.board[row][column] = 10;
+        } else if (value.equals("SubmarineSunk")) {
+            this.board[row][column] = 11;
+        } else if (value.equals("DestroyerSunk")) {
+            this.board[row][column] = 12;
+        } else if (value.equals("FrigateSunk")) {
+            this.board[row][column] = 13;
+        }
     }
 
     public void setShip(int row, int column, String ship) {
