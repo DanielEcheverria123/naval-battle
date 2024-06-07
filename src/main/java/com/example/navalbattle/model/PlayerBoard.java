@@ -25,6 +25,12 @@ public class PlayerBoard {
         return board;
     }
 
+    public int getSpecificPlayerBoardCell(int row, int column) {
+        // System.out.println("Machine Board Cell [" + row + "][" + column + "] = " +
+        // this.board[row][column]);
+        return this.board[row][column];
+    }
+
     public void setShip(int row, int column, String ship) {
 
         if (ship.equals("Carrier")) {
