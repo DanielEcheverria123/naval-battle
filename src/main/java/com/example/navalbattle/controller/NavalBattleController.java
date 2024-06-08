@@ -125,6 +125,7 @@ public class NavalBattleController {
     private void add_carriers() {
         // Adding Carriers to the player's board
         carrier1 = new Carrier(18 * 4, 0, 6);
+        carrier1.getShipGroup().setVisible(false);
         machineBoard.setShip(carrier1.getRow(), carrier1.getCol(), "Carrier");
         gameBoardMachine.add(carrier1.getShipGroup(), carrier1.getCol(), carrier1.getRow());
     }
@@ -145,6 +146,7 @@ public class NavalBattleController {
             verifySub(submarine1);
         }
         // verifySub(submarine1);
+        submarine1.getShipGroup().setVisible(false);
         gameBoardMachine.add(submarine1.getShipGroup(), submarine1.getCol(), submarine1.getRow());
 
         Submarine submarine2 = new Submarine(18 * 3, 0, 8);
@@ -162,6 +164,7 @@ public class NavalBattleController {
         }
         // verifySub(submarine2);
         // System.out.println(submarine2.getRow() + " " + submarine2.getCol());
+        submarine2.getShipGroup().setVisible(false);
         gameBoardMachine.add(submarine2.getShipGroup(), submarine2.getCol(), submarine2.getRow());
     }
 
@@ -180,7 +183,7 @@ public class NavalBattleController {
 
             verifyDes(destroyer1);
         }
-
+        destroyer1.getShipGroup().setVisible(false);
         gameBoardMachine.add(destroyer1.getShipGroup(), destroyer1.getCol(), destroyer1.getRow());
 
         Destroyer destroyer2 = new Destroyer(18 * 2, get_random_pos(), get_random_pos());
@@ -196,6 +199,7 @@ public class NavalBattleController {
 
             verifyDes(destroyer2);
         }
+        destroyer2.getShipGroup().setVisible(false);
         gameBoardMachine.add(destroyer2.getShipGroup(), destroyer2.getCol(), destroyer2.getRow());
 
         Destroyer destroyer3 = new Destroyer(18 * 2, get_random_pos(), get_random_pos());
@@ -211,6 +215,7 @@ public class NavalBattleController {
 
             verifyDes(destroyer3);
         }
+        destroyer3.getShipGroup().setVisible(false);
         gameBoardMachine.add(destroyer3.getShipGroup(), destroyer3.getCol(), destroyer3.getRow());
     }
 
@@ -229,6 +234,7 @@ public class NavalBattleController {
 
             verifyFri(frigate1);
         }
+        frigate1.getShipGroup().setVisible(false);
         gameBoardMachine.add(frigate1.getShipGroup(), frigate1.getCol(), frigate1.getRow());
 
         Frigate frigate2 = new Frigate(18 * 1, get_random_pos(), get_random_pos());
@@ -244,6 +250,7 @@ public class NavalBattleController {
 
             verifyFri(frigate2);
         }
+        frigate2.getShipGroup().setVisible(false);
         gameBoardMachine.add(frigate2.getShipGroup(), frigate2.getCol(), frigate2.getRow());
 
         Frigate frigate3 = new Frigate(18 * 1, get_random_pos(), get_random_pos());
@@ -259,6 +266,7 @@ public class NavalBattleController {
 
             verifyFri(frigate3);
         }
+        frigate3.getShipGroup().setVisible(false);
         gameBoardMachine.add(frigate3.getShipGroup(), frigate3.getCol(), frigate3.getRow());
 
         Frigate frigate4 = new Frigate(18 * 1, get_random_pos(), get_random_pos());
@@ -274,6 +282,7 @@ public class NavalBattleController {
 
             verifyFri(frigate4);
         }
+        frigate4.getShipGroup().setVisible(false);
         gameBoardMachine.add(frigate4.getShipGroup(), frigate4.getCol(), frigate4.getRow());
     }
 
@@ -1752,12 +1761,15 @@ public class NavalBattleController {
                         if (arrayCarrier.length == 0) {
                             arrayCarrier = new int[] { row, col };
                             Carrier carrier = new Carrier(18 * 4, arrayCarrier[0], arrayCarrier[1]);
+                            carrier.getShipGroup().setVisible(false);
+
                             gameBoardMachine.add(carrier.getShipGroup(), carrier.getCol(), carrier.getRow());
                         }
                     } else if (cellValue == 2) {
                         if (arraySubmarine1.length == 0) {
                             arraySubmarine1 = new int[] { row, col };
                             Submarine submarine = new Submarine(18 * 3, arraySubmarine1[0], arraySubmarine1[1]);
+                            submarine.getShipGroup().setVisible(false);
                             gameBoardMachine.add(submarine.getShipGroup(), submarine.getCol(), submarine.getRow());
                         }
                         if (arraySubmarine1.length != 0) {
@@ -1766,6 +1778,7 @@ public class NavalBattleController {
                                     arraySubmarine2 = new int[] { row, col };
                                     Submarine submarine2 = new Submarine(18 * 3, arraySubmarine2[0],
                                             arraySubmarine2[1]);
+                                    submarine2.getShipGroup().setVisible(false);
                                     gameBoardMachine.add(submarine2.getShipGroup(), submarine2.getCol(),
                                             submarine2.getRow());
                                 }
@@ -1779,6 +1792,8 @@ public class NavalBattleController {
                             System.out.println(arrayDestroyer1[1]);
 
                             Destroyer destroyer = new Destroyer(18 * 2, arrayDestroyer1[0], arrayDestroyer1[1]);
+
+                            destroyer.getShipGroup().setVisible(false);
                             gameBoardMachine.add(destroyer.getShipGroup(), destroyer.getCol(), destroyer.getRow());
                         } else if (arrayDestroyer1.length != 0) {
                             if (arrayDestroyer1[1] + 1 == col) {
@@ -1788,6 +1803,8 @@ public class NavalBattleController {
                                 System.out.println(arrayDestroyer2[1]);
                                 Destroyer destroyer2 = new Destroyer(18 * 2, arrayDestroyer2[0],
                                         arrayDestroyer2[1]);
+
+                                destroyer2.getShipGroup().setVisible(false);
                                 gameBoardMachine.add(destroyer2.getShipGroup(), destroyer2.getCol(),
                                         destroyer2.getRow());
                             } else if (arrayDestroyer2.length != 0) {
@@ -1799,6 +1816,7 @@ public class NavalBattleController {
 
                                     Destroyer destroyer3 = new Destroyer(18 * 2, arrayDestroyer3[0],
                                             arrayDestroyer3[1]);
+                                    destroyer3.getShipGroup().setVisible(false);
                                     gameBoardMachine.add(destroyer3.getShipGroup(), destroyer3.getCol(),
                                             destroyer3.getRow());
                                 } else {
@@ -1810,6 +1828,7 @@ public class NavalBattleController {
                         if (arrayFrigate1.length == 0) {
                             arrayFrigate1 = new int[] { row, col };
                             Frigate frigate = new Frigate(18 * 1, arrayFrigate1[0], arrayFrigate1[1]);
+                            frigate.getShipGroup().setVisible(false);
                             gameBoardMachine.add(frigate.getShipGroup(), frigate.getCol(), frigate.getRow());
                         } else if (arrayFrigate1.length != 0) {
                             if (arrayFrigate1[1] + 1 == col) {
@@ -1817,6 +1836,7 @@ public class NavalBattleController {
                             } else if (arrayFrigate2.length == 0) {
                                 arrayFrigate2 = new int[] { row, col };
                                 Frigate frigate2 = new Frigate(18 * 1, arrayFrigate2[0], arrayFrigate2[1]);
+                                frigate2.getShipGroup().setVisible(false);
                                 gameBoardMachine.add(frigate2.getShipGroup(), frigate2.getCol(), frigate2.getRow());
                             } else if (arrayFrigate2.length != 0) {
                                 if (arrayFrigate2[1] + 1 == col) {
@@ -1824,6 +1844,7 @@ public class NavalBattleController {
                                 } else if (arrayFrigate3.length == 0) {
                                     arrayFrigate3 = new int[] { row, col };
                                     Frigate frigate3 = new Frigate(18 * 1, arrayFrigate3[0], arrayFrigate3[1]);
+                                    frigate3.getShipGroup().setVisible(false);
                                     gameBoardMachine.add(frigate3.getShipGroup(), frigate3.getCol(), frigate3.getRow());
                                 } else if (arrayFrigate3.length != 0) {
                                     if (arrayFrigate3[1] + 1 == col) {
@@ -1831,6 +1852,8 @@ public class NavalBattleController {
                                     } else if (arrayFrigate4.length == 0) {
                                         arrayFrigate4 = new int[] { row, col };
                                         Frigate frigate4 = new Frigate(18 * 1, arrayFrigate4[0], arrayFrigate4[1]);
+                                        frigate4.getShipGroup().setVisible(false);
+
                                         gameBoardMachine.add(frigate4.getShipGroup(), frigate4.getCol(),
                                                 frigate4.getRow());
                                     }
@@ -1844,6 +1867,8 @@ public class NavalBattleController {
                         if (arrayCarrier.length == 0) {
                             arrayCarrier = new int[] { row, col };
                             Carrier carrier = new Carrier(18 * 4, arrayCarrier[0], arrayCarrier[1]);
+                            carrier.getShipGroup().setVisible(false);
+
                             gameBoardMachine.add(carrier.getShipGroup(), carrier.getCol(), carrier.getRow());
                         }
                         drawHitFlame(col, row, gameBoardMachine);
@@ -1925,6 +1950,8 @@ public class NavalBattleController {
                         if (arrayCarrier.length == 0) {
                             arrayCarrier = new int[] { row, col };
                             Carrier carrier = new Carrier(18 * 4, arrayCarrier[0], arrayCarrier[1]);
+                            carrier.getShipGroup().setVisible(false);
+
                             gameBoardMachine.add(carrier.getShipGroup(), carrier.getCol(), carrier.getRow());
                         }
                         drawSunkShip(col, row, gameBoardMachine);
