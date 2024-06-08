@@ -187,8 +187,22 @@
                         <Font name="Copperplate Gothic Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Button id="buttonSave" fx:id="buttonSave" mnemonicParsing="false" onAction="#onClickButtonSave" text="Button" GridPane.columnIndex="7" GridPane.rowIndex="1" />
-                  <Button id="buttonLoad" fx:id="buttonLoad" mnemonicParsing="false" onAction="#onClickButtonLoad" text="Button" GridPane.columnIndex="7" GridPane.rowIndex="3" />
+                  <Button id="buttonSave" fx:id="buttonSave" mnemonicParsing="false" onAction="#onClickButtonSave" style="-fx-background-image: src/main/resources/images/save.png;" GridPane.columnIndex="7" GridPane.rowIndex="1">
+                     <graphic>
+                        <ImageView fitHeight="27.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/save.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button id="buttonLoad" fx:id="buttonLoad" mnemonicParsing="false" onAction="#onClickButtonLoad" GridPane.columnIndex="7" GridPane.rowIndex="3">
+                     <graphic>
+                        <ImageView fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/load.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
                </children>
             </GridPane>
          </children>
