@@ -1,6 +1,8 @@
 package com.example.navalbattle.model;
 
-public class PlayerBoard {
+import java.io.Serializable;
+
+public class PlayerBoard implements Serializable{
 
     private int[][] board;
 
