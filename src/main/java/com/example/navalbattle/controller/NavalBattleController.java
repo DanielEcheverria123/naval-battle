@@ -23,6 +23,7 @@ import javafx.scene.input.TransferMode;
 import javafx.util.Duration;
 import javafx.animation.PauseTransition;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -67,6 +68,12 @@ public class NavalBattleController {
 
     @FXML
     private Label labelSubmarineQuantityLeft;
+
+    @FXML
+    private Label labelTurn;
+
+    @FXML
+    private Label labelTurnText;
 
     @FXML
     private Button buttonHandlerPlay;
@@ -1203,12 +1210,13 @@ public class NavalBattleController {
                     System.out.println("Barcos restantes: " + leftMachineShip);
                     System.out.println(leftMachineShip);
                     turn = 0;
+                    labelTurnText.setText("Máquina");
                     verifyVictory();
-                    // Crear una pausa de 5 segundos
-                    // PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                    // pause.setOnFinished(delay -> machineTurnsAttack());
-                    // pause.play();
-                    machineTurnsAttack();
+                    // Crear una pausa de 2 segundos
+                    PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                    pause.setOnFinished(delay -> machineTurnsAttack());
+                    pause.play();
+                    // machineTurnsAttack();
                 } else {
                     System.out.println("Waiting for the machine to attack");
                 }
@@ -1287,6 +1295,7 @@ public class NavalBattleController {
         System.out.println(leftPlayerShip);
         verifyVictory();
         turn = 1;
+        labelTurnText.setText("Jugador");
     }
 
     @FXML
@@ -1313,6 +1322,7 @@ public class NavalBattleController {
                 labelFrigateQuantityLeft.getText().equals("0")) {
             System.out.println("Juego Iniciado");
             turn = 1;
+            labelTurnText.setText("Jugador");
         } else {
             // Puede Ir una Alerta
             System.out.println("No se han colocado todas las naves");
@@ -1327,6 +1337,7 @@ public class NavalBattleController {
         // FileReader fileReader = new FileReader("gameState.txt");
         loadPlayerBoardSaveData();
         loadMachineBoardSaveData();
+        loadSaveDataStates();
     }
 
     @FXML
@@ -1345,15 +1356,14 @@ public class NavalBattleController {
          * 8. El estado del juego
          * 
          */
-        String content = "Posición de las naves en el tablero del jugador: " + playerBoard.getPlayerBoard() + "\n" +
-                "Posición de los ataques realizados por el jugador: " + playerBoard.getPlayerBoard() + "\n" +
-                "Posición de los ataques realizados por la máquina: " + machineBoard.getMachineBoard() + "\n" +
-                "Posición de las naves en el tablero de la máquina: " + machineBoard.getMachineBoard() + "\n" +
-                "Cantidad de barcos restantes en el tablero del jugador: " + leftPlayerShip + "\n" +
-                "Cantidad de barcos restantes en el tablero de la máquina: " + leftMachineShip + "\n" +
-                "Turno actual: " + turn + "\n" +
-                "Estado del juego: " + "En curso";
-        // createSaveData(content);
+        String content = leftPlayerShip + "\n" +
+                leftMachineShip + "\n" +
+                labelCarrierQuantityLeft.getText() + "\n" +
+                labelSubmarineQuantityLeft.getText() + "\n" +
+                labelDestroyerQuantityLeft.getText() + "\n" +
+                labelFrigateQuantityLeft.getText() + "\n" +
+                turn + "\n";
+        createSaveData(content);
         // Guardar en un archivo
         // File file = new File("gameState.txt");
         // FileWriter fileWriter = new FileWriter("gameState.txt");
@@ -1519,6 +1529,171 @@ public class NavalBattleController {
                                 }
                             }
                         }
+                    } else if (cellValue == 5) {
+                        drawWaterHit(col, row, gameBoardPlayer);
+
+                    } else if (cellValue == 6) {
+                        if (arrayCarrier.length == 0) {
+                            arrayCarrier = new int[] { row, col };
+                            Carrier carrier = new Carrier(18 * 4, arrayCarrier[0], arrayCarrier[1]);
+                            gameBoardPlayer.add(carrier.getShipGroup(), carrier.getCol(), carrier.getRow());
+                        }
+                        drawHitFlame(col, row, gameBoardPlayer);
+                    } else if (cellValue == 7) {
+                        if (arraySubmarine1.length == 0) {
+                            arraySubmarine1 = new int[] { row, col };
+                            Submarine submarine = new Submarine(18 * 3, arraySubmarine1[0], arraySubmarine1[1]);
+                            gameBoardPlayer.add(submarine.getShipGroup(), submarine.getCol(), submarine.getRow());
+                        } else if (arraySubmarine1.length != 0) {
+                            if (arraySubmarine1[1] + 1 == col || arraySubmarine1[1] + 2 == col) {
+
+                            } else if (arraySubmarine2.length == 0) {
+                                arraySubmarine2 = new int[] { row, col };
+                                Submarine submarine2 = new Submarine(18 * 3, arraySubmarine2[0], arraySubmarine2[1]);
+                                gameBoardPlayer.add(submarine2.getShipGroup(), submarine2.getCol(),
+                                        submarine2.getRow());
+                            }
+                        }
+                        drawHitFlame(col, row, gameBoardPlayer);
+                    } else if (cellValue == 8) {
+                        if (arrayDestroyer1.length == 0) {
+                            arrayDestroyer1 = new int[] { row, col };
+                            Destroyer destroyer = new Destroyer(18 * 2, arrayDestroyer1[0], arrayDestroyer1[1]);
+                            gameBoardPlayer.add(destroyer.getShipGroup(), destroyer.getCol(), destroyer.getRow());
+                        } else if (arrayDestroyer1.length != 0) {
+                            if (arrayDestroyer1[1] + 1 == col) {
+
+                            } else if (arrayDestroyer2.length == 0) {
+                                arrayDestroyer2 = new int[] { row, col };
+                                Destroyer destroyer2 = new Destroyer(18 * 2, arrayDestroyer2[0], arrayDestroyer2[1]);
+                                gameBoardPlayer.add(destroyer2.getShipGroup(), destroyer2.getCol(),
+                                        destroyer2.getRow());
+                            } else if (arrayDestroyer2.length != 0) {
+                                if (arrayDestroyer2[1] + 1 == col) {
+
+                                } else if (arrayDestroyer3.length == 0) {
+                                    arrayDestroyer3 = new int[] { row, col };
+                                    Destroyer destroyer3 = new Destroyer(18 * 2, arrayDestroyer3[0],
+                                            arrayDestroyer3[1]);
+                                    gameBoardPlayer.add(destroyer3.getShipGroup(), destroyer3.getCol(),
+                                            destroyer3.getRow());
+                                }
+                            }
+                        }
+                        drawHitFlame(col, row, gameBoardPlayer);
+                    } else if (cellValue == 9) {
+                        if (arrayFrigate1.length == 0) {
+                            arrayFrigate1 = new int[] { row, col };
+                            Frigate frigate = new Frigate(18 * 1, arrayFrigate1[0], arrayFrigate1[1]);
+                            gameBoardPlayer.add(frigate.getShipGroup(), frigate.getCol(), frigate.getRow());
+                        } else if (arrayFrigate1.length != 0) {
+                            if (arrayFrigate1[1] + 1 == col) {
+
+                            } else if (arrayFrigate2.length == 0) {
+                                arrayFrigate2 = new int[] { row, col };
+                                Frigate frigate2 = new Frigate(18 * 1, arrayFrigate2[0], arrayFrigate2[1]);
+                                gameBoardPlayer.add(frigate2.getShipGroup(), frigate2.getCol(), frigate2.getRow());
+                            } else if (arrayFrigate2.length != 0) {
+                                if (arrayFrigate2[1] + 1 == col) {
+
+                                } else if (arrayFrigate3.length == 0) {
+                                    arrayFrigate3 = new int[] { row, col };
+                                    Frigate frigate3 = new Frigate(18 * 1, arrayFrigate3[0], arrayFrigate3[1]);
+                                    gameBoardPlayer.add(frigate3.getShipGroup(), frigate3.getCol(), frigate3.getRow());
+                                } else if (arrayFrigate3.length != 0) {
+                                    if (arrayFrigate3[1] + 1 == col) {
+
+                                    } else if (arrayFrigate4.length == 0) {
+                                        arrayFrigate4 = new int[] { row, col };
+                                        Frigate frigate4 = new Frigate(18 * 1, arrayFrigate4[0], arrayFrigate4[1]);
+                                        gameBoardPlayer.add(frigate4.getShipGroup(), frigate4.getCol(),
+                                                frigate4.getRow());
+                                    }
+                                }
+                            }
+                        }
+                        drawHitFlame(col, row, gameBoardPlayer);
+                    } else if (cellValue == 10) {
+                        if (arrayCarrier.length == 0) {
+                            arrayCarrier = new int[] { row, col };
+                            Carrier carrier = new Carrier(18 * 4, arrayCarrier[0], arrayCarrier[1]);
+                            gameBoardPlayer.add(carrier.getShipGroup(), carrier.getCol(), carrier.getRow());
+                        }
+                        drawSunkShip(col, row, gameBoardPlayer);
+                    } else if (cellValue == 11) {
+                        if (arraySubmarine1.length == 0) {
+                            arraySubmarine1 = new int[] { row, col };
+                            Submarine submarine = new Submarine(18 * 3, arraySubmarine1[0], arraySubmarine1[1]);
+                            gameBoardPlayer.add(submarine.getShipGroup(), submarine.getCol(), submarine.getRow());
+                        } else if (arraySubmarine1.length != 0) {
+                            if (arraySubmarine1[1] + 1 == col || arraySubmarine1[1] + 2 == col) {
+
+                            } else if (arraySubmarine2.length == 0) {
+                                arraySubmarine2 = new int[] { row, col };
+                                Submarine submarine2 = new Submarine(18 * 3, arraySubmarine2[0], arraySubmarine2[1]);
+                                gameBoardPlayer.add(submarine2.getShipGroup(), submarine2.getCol(),
+                                        submarine2.getRow());
+                            }
+                        }
+                        drawSunkShip(col, row, gameBoardPlayer);
+                    } else if (cellValue == 12) {
+                        if (arrayDestroyer1.length == 0) {
+                            arrayDestroyer1 = new int[] { row, col };
+                            Destroyer destroyer = new Destroyer(18 * 2, arrayDestroyer1[0], arrayDestroyer1[1]);
+                            gameBoardPlayer.add(destroyer.getShipGroup(), destroyer.getCol(), destroyer.getRow());
+                        } else if (arrayDestroyer1.length != 0) {
+                            if (arrayDestroyer1[1] + 1 == col) {
+
+                            } else if (arrayDestroyer2.length == 0) {
+                                arrayDestroyer2 = new int[] { row, col };
+                                Destroyer destroyer2 = new Destroyer(18 * 2, arrayDestroyer2[0], arrayDestroyer2[1]);
+                                gameBoardPlayer.add(destroyer2.getShipGroup(), destroyer2.getCol(),
+                                        destroyer2.getRow());
+                            } else if (arrayDestroyer2.length != 0) {
+                                if (arrayDestroyer2[1] + 1 == col) {
+
+                                } else if (arrayDestroyer3.length == 0) {
+                                    arrayDestroyer3 = new int[] { row, col };
+                                    Destroyer destroyer3 = new Destroyer(18 * 2, arrayDestroyer3[0],
+                                            arrayDestroyer3[1]);
+                                    gameBoardPlayer.add(destroyer3.getShipGroup(), destroyer3.getCol(),
+                                            destroyer3.getRow());
+                                }
+                            }
+                        }
+                        drawSunkShip(col, row, gameBoardPlayer);
+                    } else if (cellValue == 13) {
+                        if (arrayFrigate1.length == 0) {
+                            arrayFrigate1 = new int[] { row, col };
+                            Frigate frigate = new Frigate(18 * 1, arrayFrigate1[0], arrayFrigate1[1]);
+                            gameBoardPlayer.add(frigate.getShipGroup(), frigate.getCol(), frigate.getRow());
+                        } else if (arrayFrigate1.length != 0) {
+                            if (arrayFrigate1[1] + 1 == col) {
+
+                            } else if (arrayFrigate2.length == 0) {
+                                arrayFrigate2 = new int[] { row, col };
+                                Frigate frigate2 = new Frigate(18 * 1, arrayFrigate2[0], arrayFrigate2[1]);
+                                gameBoardPlayer.add(frigate2.getShipGroup(), frigate2.getCol(), frigate2.getRow());
+                            } else if (arrayFrigate2.length != 0) {
+                                if (arrayFrigate2[1] + 1 == col) {
+
+                                } else if (arrayFrigate3.length == 0) {
+                                    arrayFrigate3 = new int[] { row, col };
+                                    Frigate frigate3 = new Frigate(18 * 1, arrayFrigate3[0], arrayFrigate3[1]);
+                                    gameBoardPlayer.add(frigate3.getShipGroup(), frigate3.getCol(), frigate3.getRow());
+                                } else if (arrayFrigate3.length != 0) {
+                                    if (arrayFrigate3[1] + 1 == col) {
+
+                                    } else if (arrayFrigate4.length == 0) {
+                                        arrayFrigate4 = new int[] { row, col };
+                                        Frigate frigate4 = new Frigate(18 * 1, arrayFrigate4[0], arrayFrigate4[1]);
+                                        gameBoardPlayer.add(frigate4.getShipGroup(), frigate4.getCol(),
+                                                frigate4.getRow());
+                                    }
+                                }
+                            }
+                        }
+                        drawSunkShip(col, row, gameBoardPlayer);
                     }
                 }
             }
@@ -1662,101 +1837,227 @@ public class NavalBattleController {
                                 }
                             }
                         }
+                    } else if (cellValue == 5) {
+                        drawWaterHit(col, row, gameBoardMachine);
+
+                    } else if (cellValue == 6) {
+                        if (arrayCarrier.length == 0) {
+                            arrayCarrier = new int[] { row, col };
+                            Carrier carrier = new Carrier(18 * 4, arrayCarrier[0], arrayCarrier[1]);
+                            gameBoardMachine.add(carrier.getShipGroup(), carrier.getCol(), carrier.getRow());
+                        }
+                        drawHitFlame(col, row, gameBoardMachine);
+                    } else if (cellValue == 7) {
+                        if (arraySubmarine1.length == 0) {
+                            arraySubmarine1 = new int[] { row, col };
+                            Submarine submarine = new Submarine(18 * 3, arraySubmarine1[0], arraySubmarine1[1]);
+                            gameBoardMachine.add(submarine.getShipGroup(), submarine.getCol(), submarine.getRow());
+                        } else if (arraySubmarine1.length != 0) {
+                            if (arraySubmarine1[1] + 1 == col || arraySubmarine1[1] + 2 == col) {
+
+                            } else if (arraySubmarine2.length == 0) {
+                                arraySubmarine2 = new int[] { row, col };
+                                Submarine submarine2 = new Submarine(18 * 3, arraySubmarine2[0], arraySubmarine2[1]);
+                                gameBoardMachine.add(submarine2.getShipGroup(), submarine2.getCol(),
+                                        submarine2.getRow());
+                            }
+                        }
+                        drawHitFlame(col, row, gameBoardMachine);
+                    } else if (cellValue == 8) {
+                        if (arrayDestroyer1.length == 0) {
+                            arrayDestroyer1 = new int[] { row, col };
+                            Destroyer destroyer = new Destroyer(18 * 2, arrayDestroyer1[0], arrayDestroyer1[1]);
+                            gameBoardMachine.add(destroyer.getShipGroup(), destroyer.getCol(), destroyer.getRow());
+                        } else if (arrayDestroyer1.length != 0) {
+                            if (arrayDestroyer1[1] + 1 == col) {
+
+                            } else if (arrayDestroyer2.length == 0) {
+                                arrayDestroyer2 = new int[] { row, col };
+                                Destroyer destroyer2 = new Destroyer(18 * 2, arrayDestroyer2[0], arrayDestroyer2[1]);
+                                gameBoardMachine.add(destroyer2.getShipGroup(), destroyer2.getCol(),
+                                        destroyer2.getRow());
+                            } else if (arrayDestroyer2.length != 0) {
+                                if (arrayDestroyer2[1] + 1 == col) {
+
+                                } else if (arrayDestroyer3.length == 0) {
+                                    arrayDestroyer3 = new int[] { row, col };
+                                    Destroyer destroyer3 = new Destroyer(18 * 2, arrayDestroyer3[0],
+                                            arrayDestroyer3[1]);
+                                    gameBoardMachine.add(destroyer3.getShipGroup(), destroyer3.getCol(),
+                                            destroyer3.getRow());
+                                }
+                            }
+                        }
+                        drawHitFlame(col, row, gameBoardMachine);
+                    } else if (cellValue == 9) {
+                        if (arrayFrigate1.length == 0) {
+                            arrayFrigate1 = new int[] { row, col };
+                            Frigate frigate = new Frigate(18 * 1, arrayFrigate1[0], arrayFrigate1[1]);
+                            gameBoardMachine.add(frigate.getShipGroup(), frigate.getCol(), frigate.getRow());
+                        } else if (arrayFrigate1.length != 0) {
+                            if (arrayFrigate1[1] + 1 == col) {
+
+                            } else if (arrayFrigate2.length == 0) {
+                                arrayFrigate2 = new int[] { row, col };
+                                Frigate frigate2 = new Frigate(18 * 1, arrayFrigate2[0], arrayFrigate2[1]);
+                                gameBoardMachine.add(frigate2.getShipGroup(), frigate2.getCol(), frigate2.getRow());
+                            } else if (arrayFrigate2.length != 0) {
+                                if (arrayFrigate2[1] + 1 == col) {
+
+                                } else if (arrayFrigate3.length == 0) {
+                                    arrayFrigate3 = new int[] { row, col };
+                                    Frigate frigate3 = new Frigate(18 * 1, arrayFrigate3[0], arrayFrigate3[1]);
+                                    gameBoardMachine.add(frigate3.getShipGroup(), frigate3.getCol(), frigate3.getRow());
+                                } else if (arrayFrigate3.length != 0) {
+                                    if (arrayFrigate3[1] + 1 == col) {
+
+                                    } else if (arrayFrigate4.length == 0) {
+                                        arrayFrigate4 = new int[] { row, col };
+                                        Frigate frigate4 = new Frigate(18 * 1, arrayFrigate4[0], arrayFrigate4[1]);
+                                        gameBoardMachine.add(frigate4.getShipGroup(), frigate4.getCol(),
+                                                frigate4.getRow());
+                                    }
+                                }
+                            }
+                        }
+                        drawHitFlame(col, row, gameBoardMachine);
+                    } else if (cellValue == 10) {
+                        if (arrayCarrier.length == 0) {
+                            arrayCarrier = new int[] { row, col };
+                            Carrier carrier = new Carrier(18 * 4, arrayCarrier[0], arrayCarrier[1]);
+                            gameBoardMachine.add(carrier.getShipGroup(), carrier.getCol(), carrier.getRow());
+                        }
+                        drawSunkShip(col, row, gameBoardMachine);
+                    } else if (cellValue == 11) {
+                        if (arraySubmarine1.length == 0) {
+                            arraySubmarine1 = new int[] { row, col };
+                            Submarine submarine = new Submarine(18 * 3, arraySubmarine1[0], arraySubmarine1[1]);
+                            gameBoardMachine.add(submarine.getShipGroup(), submarine.getCol(), submarine.getRow());
+                        } else if (arraySubmarine1.length != 0) {
+                            if (arraySubmarine1[1] + 1 == col || arraySubmarine1[1] + 2 == col) {
+
+                            } else if (arraySubmarine2.length == 0) {
+                                arraySubmarine2 = new int[] { row, col };
+                                Submarine submarine2 = new Submarine(18 * 3, arraySubmarine2[0], arraySubmarine2[1]);
+                                gameBoardMachine.add(submarine2.getShipGroup(), submarine2.getCol(),
+                                        submarine2.getRow());
+                            }
+                        }
+                        drawSunkShip(col, row, gameBoardMachine);
+                    } else if (cellValue == 12) {
+                        if (arrayDestroyer1.length == 0) {
+                            arrayDestroyer1 = new int[] { row, col };
+                            Destroyer destroyer = new Destroyer(18 * 2, arrayDestroyer1[0], arrayDestroyer1[1]);
+                            gameBoardMachine.add(destroyer.getShipGroup(), destroyer.getCol(), destroyer.getRow());
+                        } else if (arrayDestroyer1.length != 0) {
+                            if (arrayDestroyer1[1] + 1 == col) {
+
+                            } else if (arrayDestroyer2.length == 0) {
+                                arrayDestroyer2 = new int[] { row, col };
+                                Destroyer destroyer2 = new Destroyer(18 * 2, arrayDestroyer2[0], arrayDestroyer2[1]);
+                                gameBoardMachine.add(destroyer2.getShipGroup(), destroyer2.getCol(),
+                                        destroyer2.getRow());
+                            } else if (arrayDestroyer2.length != 0) {
+                                if (arrayDestroyer2[1] + 1 == col) {
+
+                                } else if (arrayDestroyer3.length == 0) {
+                                    arrayDestroyer3 = new int[] { row, col };
+                                    Destroyer destroyer3 = new Destroyer(18 * 2, arrayDestroyer3[0],
+                                            arrayDestroyer3[1]);
+                                    gameBoardMachine.add(destroyer3.getShipGroup(), destroyer3.getCol(),
+                                            destroyer3.getRow());
+                                }
+                            }
+                        }
+                        drawSunkShip(col, row, gameBoardMachine);
+                    } else if (cellValue == 13) {
+                        if (arrayFrigate1.length == 0) {
+                            arrayFrigate1 = new int[] { row, col };
+                            Frigate frigate = new Frigate(18 * 1, arrayFrigate1[0], arrayFrigate1[1]);
+                            gameBoardMachine.add(frigate.getShipGroup(), frigate.getCol(), frigate.getRow());
+                        } else if (arrayFrigate1.length != 0) {
+                            if (arrayFrigate1[1] + 1 == col) {
+
+                            } else if (arrayFrigate2.length == 0) {
+                                arrayFrigate2 = new int[] { row, col };
+                                Frigate frigate2 = new Frigate(18 * 1, arrayFrigate2[0], arrayFrigate2[1]);
+                                gameBoardMachine.add(frigate2.getShipGroup(), frigate2.getCol(), frigate2.getRow());
+                            } else if (arrayFrigate2.length != 0) {
+                                if (arrayFrigate2[1] + 1 == col) {
+
+                                } else if (arrayFrigate3.length == 0) {
+                                    arrayFrigate3 = new int[] { row, col };
+                                    Frigate frigate3 = new Frigate(18 * 1, arrayFrigate3[0], arrayFrigate3[1]);
+                                    gameBoardMachine.add(frigate3.getShipGroup(), frigate3.getCol(), frigate3.getRow());
+                                } else if (arrayFrigate3.length != 0) {
+                                    if (arrayFrigate3[1] + 1 == col) {
+
+                                    } else if (arrayFrigate4.length == 0) {
+                                        arrayFrigate4 = new int[] { row, col };
+                                        Frigate frigate4 = new Frigate(18 * 1, arrayFrigate4[0], arrayFrigate4[1]);
+                                        gameBoardMachine.add(frigate4.getShipGroup(), frigate4.getCol(),
+                                                frigate4.getRow());
+                                    }
+                                }
+                            }
+                        }
+                        drawSunkShip(col, row, gameBoardMachine);
                     }
                 }
             }
-
-            // for (int row = 0; row <= 9; row++) {
-            // for (int col = 0; col <= 9; col++) {
-            // int cellValue = machineBoard.getSpecificMachineBoardCell(row, col);
-            // if (cellValue != 0) {
-            // Rectangle rect = new Rectangle(cellSize, cellSize);
-            // switch (cellValue) {
-            // case 1:
-            // Carrier carrier = new Carrier(18 * 4, row, col);
-            // // machineBoard.setShip(carrier.getRow(), carrier.getCol(), "Carrier");
-            // gameBoardMachine.add(carrier.getShipGroup(), col, row);
-            // break;
-            // case 2:
-            // Submarine submarine = new Submarine(18 * 3, row, col);
-            // // machineBoard.setShip(submarine.getRow(), submarine.getCol(), "Submarine");
-            // gameBoardMachine.add(submarine.getShipGroup(), col, row);
-            // break;
-            // case 3:
-            // Destroyer destroyer = new Destroyer(18 * 2, row, col);
-            // // machineBoard.setShip(destroyer.getRow(), destroyer.getCol(), "Destroyer");
-            // gameBoardMachine.add(destroyer.getShipGroup(), col, row);
-            // break;
-            // case 4:
-            // Frigate frigate = new Frigate(18 * 1, row, col);
-            // // machineBoard.setShip(frigate.getRow(), frigate.getCol(), "Frigate");
-            // gameBoardMachine.add(frigate.getShipGroup(), col, row);
-            // break;
-            // }
-            // gameBoardMachine.add(rect, col, row);
-
-            // gameBoardMachine = newGameBoardMachine;
-
-        } catch (IOException |
-
-                ClassNotFoundException i) {
+        } catch (IOException | ClassNotFoundException i) {
             i.printStackTrace();
-
         }
     }
 
-    private void paintShipFromPosition(GridPane gridPane, int startRow, int startCol, int shipType, int cellSize) {
-        // Color shipColor;
-        int shipLength;
-
-        switch (shipType) {
-            case 1:
-                if (maxLoadCarrier > 0) {
-                    Carrier carrier = new Carrier(18 * 4, startRow, startCol);
-                    gameBoardMachine.add(carrier.getShipGroup(), startCol, startRow);
-                    maxLoadCarrier = maxLoadCarrier - 1;
-                    shipLength = 4;
-                }
-                break;
-            case 2:
-                // if (maxLoadSubmarine > 0) {
-                // Submarine submarine = new Submarine(18 * 3, startRow, startCol);
-                // gameBoardMachine.add(submarine.getShipGroup(), startCol, startRow);
-                // maxLoadSubmarine = maxLoadSubmarine - 1;
-                // shipLength = 3;
-                // }
-                break;
-            case 3:
-                if (maxLoadDestroyer > 0) {
-                    Destroyer destroyer = new Destroyer(18 * 2, startRow, startCol);
-                    gameBoardMachine.add(destroyer.getShipGroup(), startCol, startRow);
-                    maxLoadDestroyer = maxLoadDestroyer - 1;
-                    shipLength = 2;
-                }
-                break;
-            case 4:
-                if (maxLoadFrigate > 0) {
-                    Frigate frigate = new Frigate(18 * 1, startRow, startCol);
-                    gameBoardMachine.add(frigate.getShipGroup(), startCol, startRow);
-                    maxLoadFrigate = maxLoadFrigate - 1;
-                    shipLength = 1;
-                }
-                break;
-            default:
-                return;
+    public void createSaveData(String content) {
+        try (BufferedWriter fileWriter = new BufferedWriter(new FileWriter("src\\main\\resources\\com\\example\\n" + //
+                "avalbattle\\datasaves\\gameState.txt"))) {
+            fileWriter.write(content);
+        } catch (IOException i) {
+            i.printStackTrace();
         }
-
-        // Dibujar la nave horizontalmente a partir de la posición encontrada
-        // for (int i = 0; i < shipLength; i++) {
-        // if (startCol + i < board[startRow].length && board[startRow][startCol + i] ==
-        // shipType) {
-        // Rectangle rect = new Rectangle(cellSize, cellSize);
-        // rect.setFill(shipColor);
-        // gridPane.add(rect, startCol + i, startRow);
-        // } else {
-        // break;
-        // }
-        // }
     }
 
+    public void loadSaveDataStates() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src\\main\\resources\\com\\example\\n" + //
+                "avalbattle\\datasaves\\gameState.txt"))) {
+            int newLeftPlayerShip = Integer.parseInt(reader.readLine());
+            int newLeftMachineShip = Integer.parseInt(reader.readLine());
+            int newLabelCarrierQuantityLeft = Integer.parseInt(reader.readLine());
+            int newLabelSubmarineQuantityLeft = Integer.parseInt(reader.readLine());
+            int newLabelDestroyerQuantityLeft = Integer.parseInt(reader.readLine());
+            int newLabelFrigateQuantityLeft = Integer.parseInt(reader.readLine());
+            int newTurn = Integer.parseInt(reader.readLine());
+            System.out.println("Cargando Datos");
+            System.out.println(newLeftPlayerShip);
+            System.out.println(newLeftMachineShip);
+            System.out.println(newLabelCarrierQuantityLeft);
+            System.out.println(newLabelSubmarineQuantityLeft);
+            System.out.println(newLabelDestroyerQuantityLeft);
+            System.out.println(newLabelFrigateQuantityLeft);
+            System.out.println(newTurn);
+
+            leftPlayerShip = newLeftPlayerShip;
+            leftMachineShip = newLeftMachineShip;
+            labelCarrierQuantityLeft.setText(String.valueOf(newLabelCarrierQuantityLeft));
+            labelSubmarineQuantityLeft.setText(String.valueOf(newLabelSubmarineQuantityLeft));
+            labelDestroyerQuantityLeft.setText(String.valueOf(newLabelDestroyerQuantityLeft));
+            labelFrigateQuantityLeft.setText(String.valueOf(newLabelFrigateQuantityLeft));
+            turn = newTurn;
+            if (turn == 0) {
+                labelTurnText.setText("Player");
+            } else {
+                labelTurnText.setText("Machine");
+            }
+
+            disableCarrier(carrierDeck);
+            disableSubmarine(submarineDeck);
+            disableDestroyer(destroyerDeck);
+            disableFrigate(frigateDeck);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
