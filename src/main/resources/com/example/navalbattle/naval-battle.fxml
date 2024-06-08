@@ -108,11 +108,16 @@
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
          <children>
-            <GridPane id="gridDeck" fx:id="gridDeck" gridLinesVisible="true" onMouseClicked="#onMouseClickedDeck" onMouseDragged="#onMouseDraggedDeck" onMouseEntered="#onMouseEnteredGridDeck" onMouseExited="#onMouseExitDeckGrid" prefHeight="152.0" prefWidth="830.0">
+            <GridPane id="gridDeck" fx:id="gridDeck" onMouseClicked="#onMouseClickedDeck" onMouseDragged="#onMouseDraggedDeck" onMouseEntered="#onMouseEnteredGridDeck" onMouseExited="#onMouseExitDeckGrid" prefHeight="152.0" prefWidth="830.0">
               <columnConstraints>
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="198.0" minWidth="198.0" prefWidth="198.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="160.0" minWidth="60.0" prefWidth="60.0" />
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="12.0" minWidth="12.0" prefWidth="12.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="306.0" minWidth="61.0" prefWidth="80.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="306.0" minWidth="40.0" prefWidth="48.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="306.0" minWidth="40.0" prefWidth="92.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="278.0" minWidth="45.0" prefWidth="90.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -141,10 +146,49 @@
                         <Font name="Copperplate Gothic Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label id="labelCarrierQuantityLeft" fx:id="labelCarrierQuantityLeft" text="0" GridPane.columnIndex="1" />
-                  <Label id="labelSubmarineQuantityLeft" fx:id="labelSubmarineQuantityLeft" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label id="labelDestroyerQuantityLeft" fx:id="labelDestroyerQuantityLeft" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label id="labelFrigateQuantityLeft" fx:id="labelFrigateQuantityLeft" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label id="labelCarrierQuantityLeft" fx:id="labelCarrierQuantityLeft" text="0" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="18.0" />
+                     </font></Label>
+                  <Label id="labelSubmarineQuantityLeft" fx:id="labelSubmarineQuantityLeft" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="18.0" />
+                     </font></Label>
+                  <Label id="labelDestroyerQuantityLeft" fx:id="labelDestroyerQuantityLeft" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="18.0" />
+                     </font></Label>
+                  <Label id="labelFrigateQuantityLeft" fx:id="labelFrigateQuantityLeft" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="18.0" />
+                     </font></Label>
+                  <Label text="Agua" GridPane.columnIndex="4">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label text="Tocado" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label text="Hundido" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label text="Guardar" GridPane.columnIndex="7">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label text="Cargar" GridPane.columnIndex="7" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Button id="buttonSave" fx:id="buttonSave" mnemonicParsing="false" onAction="#onClickButtonSave" text="Button" GridPane.columnIndex="7" GridPane.rowIndex="1" />
+                  <Button id="buttonLoad" fx:id="buttonLoad" mnemonicParsing="false" onAction="#onClickButtonLoad" text="Button" GridPane.columnIndex="7" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </children>
